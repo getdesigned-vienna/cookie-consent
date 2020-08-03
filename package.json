@@ -10,6 +10,10 @@
     "type": "git",
     "url": "git+https://github.com/getdesigned-vienna/cookie-consent.git"
   },
+  "dependencies": {
+    "fg-cookie": "^1.0",
+    "jquery": "^3.0"
+  },
   "keywords": [
     "cookie",
     "consent"
