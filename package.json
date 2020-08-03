@@ -1,0 +1,23 @@
+{
+  "name": "@getdesigned-vienna/cookie-consent",
+  "version": "1.0.0",
+  "description": "Cookie Consent completely configured via HTML",
+  "main": "getdesigned-cookie-consent.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/getdesigned-vienna/cookie-consent.git"
+  },
+  "keywords": [
+    "cookie",
+    "consent"
+  ],
+  "author": "Getdesigned GmbH / Matthias Redl-Mann",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/getdesigned-vienna/cookie-consent/issues"
+  },
+  "homepage": "https://github.com/getdesigned-vienna/cookie-consent#readme"
+}
