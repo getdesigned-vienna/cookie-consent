@@ -5,6 +5,7 @@ Getdesigned Cookie Consent (GDCC)
 * Supports single cookies and groups
 * Supports replacing certain content (e.g. YouTube) with replacements as long as the required cookie is not permitted
 * Supports i18n via HTML attributes
+* Is capable of deleting cookies, if the category is disabled.
 * Comes with a handy debug mode to help you setup everything
 
 ## Installation
@@ -21,7 +22,7 @@ Getdesigned Cookie Consent (GDCC)
         });
 * Make sure your HTML includes the GDCC wrapper (e.g. a DIV) with the cookie consent form inside and maybe a noscript tag:
 
-        <div id="gd-cookie-consent">
+        <div id="gdcc-wrapper">
             <noscript>...</noscript>
             <form>
             ...
@@ -62,7 +63,7 @@ Getdesigned Cookie Consent (GDCC)
     * Add classes "gdcc-optin-&lt;input id&gt;" and "gdcc-optout-&lt;input id&gt;", e.g.
     
             <div>
-                <img class="gdcc-optin-image" data-gdcc-src="https://placekitten.com/g/300/200"/>
+                <img class="gdcc-optin-image gdcc-hide" data-gdcc-src="https://placekitten.com/g/300/200"/>
                 <div class="gdcc-optout-image"><h2 style="background-color: forestgreen">Image Replacement #1</h2></div>
             </div> 
     * Add classes "gdcc-optin" and "gdcc-optout" together with an attribute "data-gdcc-cookie=&lt;input id&gt;", e.g.
@@ -90,13 +91,19 @@ Getdesigned Cookie Consent (GDCC)
 * When the user clicks on an optout element (e.g. a note that YouTube is currently disabled), a confirmation appears asking the user, if she/he wants to proceed and enable the corresponding cookie category.
 * The message shown is taken from an attribute data-gdcc-msg, which MUST be set on the GDCC wrapper:
 
-        <div id="gd-cookie-consent" data-gdcc-msg='You must accept cookies in the category "@cookie@" to show this content. Proceed?'>
+        <div id="gdcc-wrapper" data-gdcc-msg='You must accept cookies in the category "@cookie@" to show this content. Proceed?'>
 * The string "@cookie@" will automatically be replaced by the label of the cookies checkbox.
 * If the user confirms, the cookie will be enabled and the changed setting is saved.
-* A more specific note can be placed on the input or the label itself. If available, it will be taken instead of the general message from the wrapper:
+* A more specific message can be placed on the input or the label itself. If available, it will be taken instead of the general message from the wrapper:
         
         <input type="checkbox" id="image" data-gdcc-msg='Enable cookie category "@cookie@"?' />
         <label for="image" data-gdcc-msg='Enable cookie category "@cookie@"?'>Images</label>
 
-    
+## Keep your cookies clean
+* If a cookie is activated even only for a short time, it will stay in memory of your browser
+* GDCC is capable of deleting those (first party) cookies, if the category gets disabled again.
+* To make this work, make sure you configure the name of the cookies to be delete in an optional attribute "data-gdcc-delete-cookie". The attribute accepts one or more cookie names space or comma separated:
+
+        <input type="checkbox" id="extfonts" data-gdcc-delete-cookie="cookieNo1, cookieNo2"/>
+
    

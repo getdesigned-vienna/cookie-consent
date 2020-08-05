@@ -12,6 +12,7 @@ function GdCookieConsent(debug = false) {
         this.restoreUserSettings();
         if (!this.deriveConfig()) return;
         if (!this.bindJqEvents()) return;
+        this.deleteCookies();
         this.updateContent();
     }
 
@@ -33,6 +34,7 @@ function GdCookieConsent(debug = false) {
         var $optInEls = jQuery(status ? optIn : optOut);
         if (this.debugMode && status && (this.$gdcc.filter('.gdcc-saved').length === 0) && ($optInEls.filter(':not(.gdcc-hide)').length > 0)) {
             this.warn('Element(s) with selector "' + optIn + '" found, which do not have set the class ".gdcc-hide" hardcoded (but should have)');
+            this.warn($optInEls.filter(':not(.gdcc-hide)'));
         }
         $optInEls.removeClass('gdcc-hide');
         var that = this;
@@ -165,12 +167,37 @@ function GdCookieConsent(debug = false) {
             that.deriveConfig()
             that.$gdcc.removeClass('gdcc-unconfirmed').addClass('gdcc-saved gdcc-confirmed');
             that.saveUserSettings(that, this);
+            that.deleteCookies();
             that.updateContent();
         });
 
         this.jQueryEventsSet = true;
         return true;
 
+    }
+
+    this.deleteCookies = function () {
+        var i = 0;
+        while (i < this.config.length) {
+            if (this.config[i].checked === 0) {
+                $el = this.$gdcc.find('#' + this.config[i].id);
+                this.log('checking for cookies for #' + this.config[i].id);
+                var deleteCookie = this.getAttribute($el, 'data-gdcc-delete-cookie');
+                if (deleteCookie) {
+                    deleteCookie = this._explode(deleteCookie);
+                    this.log('found ' + deleteCookie.length + ' cookies for #' + this.config[i].id);
+                    var j = 0;
+                    while (j < deleteCookie.length) {
+                        cookie(deleteCookie[j], false);
+                        this.log('trying to delete cookie "' + deleteCookie[j] + '" for #' + this.config[i].id);
+                        j++;
+                    }
+                } else {
+                    this.log('XX nothing found');
+                }
+            }
+            i++;
+        }
     }
 
     this.saveUserSettings = function (context, button = false) {
@@ -183,12 +210,14 @@ function GdCookieConsent(debug = false) {
         this.log(JSON.parse(json));
     }
 
+    this._explode = function (input) {
+        return input.toString().trim().replace(/[ ,]{1,}/g, ',').split(',');
+    }
+
     this._preselectCheckboxes = function (button) {
         var $button = $(button);
         if ($button.attr('data-gdcc-select')) {
-            var selector = $button.attr('data-gdcc-select').toString().trim();
-            // Normalize spaces and commas to single commas only
-            selector = selector.replace(/[ ,]{1,}/g, ',').split(',');
+            var selector = this._explode($button.attr('data-gdcc-select'));
             var i = 0;
             while (i < selector.length) {
                 if (selector[i] === '*') {
@@ -235,7 +264,7 @@ function GdCookieConsent(debug = false) {
     }
 
     this.initWrapper = function () {
-        this.$gdcc = $('#gd-cookie-consent');
+        this.$gdcc = $('#gd-cookie-consent, #gdcc-wrapper');
         if (this.$gdcc.length === 0) {
             this.error('GdCookieConsent Wrapper not found: can not find element with id "#gd-cookie-consent". Please add.');
             this.error('Sample: <div id="gd-cookie-consent">');

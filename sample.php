@@ -1,3 +1,7 @@
+<?php
+setcookie('cookieNo1', 'please delete me!');
+setcookie('cookieNo2', '#meToo!');
+?>
 <html>
 <head>
     <style>
@@ -11,7 +15,7 @@
 <!--    <link rel="preload" href="styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'">-->
 </head>
 <body>
-<div id="gd-cookie-consent" data-gdcc-msg='You must accept cookies in the category "@cookie@" to show this content. Proceed?'>
+<div id="gdcc-wrapper" data-gdcc-msg='You must accept cookies in the category "@cookie@" to show this content. Proceed?'>
     <noscript>Leider unterstützt Ihr Browser kein Javascript oder Sie haben Javascript deaktiviert.</noscript>
     <form>
         <fieldset>
@@ -39,7 +43,7 @@
             <legend>Other ...</legend>
             <input type="checkbox" id="image" data-gdcc-msg='Enable cookie category "@cookie@"?' />
             <label for="image" data-gdcc-msg='Enable cookie category "@cookie@"?'>Images</label>
-            <input type="checkbox" id="extfonts"/>
+            <input type="checkbox" id="extfonts" data-gdcc-delete-cookie="cookieNo1 cookieNo2"/>
             <label for="extfonts">External Fonts</label>
         </fieldset>
         <input type="submit" value="Save consent"/>
@@ -49,7 +53,7 @@
     </form>
 </div>
 <div>
-    <img class="gdcc-optin-image" data-gdcc-src="https://placekitten.com/g/300/200"/>
+    <img class="gdcc-optin-image gdcc-hide" data-gdcc-src="https://placekitten.com/g/300/200"/>
     <div class="gdcc-optout-image"><h2 style="background-color: forestgreen">Image Replacement #1</h2></div>
 </div>
 <div>
