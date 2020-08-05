@@ -7,6 +7,7 @@ function GdCookieConsent(debug = false) {
     this.init = function () {
         if (this.debugMode) console.log('==== Getdesigned Cookie Consent in Debug Mode ====')
         if (!this.checkJquery()) return;
+        if (!this.checkFgCookie()) return;
         if (!this.initWrapper()) return;
         this.restoreUserSettings();
         if (!this.deriveConfig()) return;
@@ -252,7 +253,15 @@ function GdCookieConsent(debug = false) {
 
     this.checkJquery = function () {
         if (typeof jQuery == 'undefined') {
-            this.error('jQuery not found')
+            this.error('jQuery not found. Please include in JS source.')
+            return false;
+        }
+        return true;
+    }
+
+    this.checkFgCookie = function () {
+        if (typeof cookie == 'undefined') {
+            this.error('fg-cookie not found. Please include in JS source.')
             return false;
         }
         return true;
@@ -294,7 +303,3 @@ function GdCookieConfig($this, gdcc, i) {
     this.id = $this.attr('id');
     this.checked = $this.is(':checked, [readonly], [disabled]') ? 1 : 0;
 }
-
-$(function () {
-    gdcc = new GdCookieConsent(true);
-});
