@@ -1,6 +1,6 @@
 {
   "name": "@getdesigned-vienna/cookie-consent",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Cookie Consent completely configured via HTML",
   "main": "getdesigned-cookie-consent.js",
   "scripts": {

@@ -102,7 +102,7 @@ Getdesigned Cookie Consent (GDCC)
 ## Keep your cookies clean
 * If a cookie is activated even only for a short time, it will stay in memory of your browser
 * GDCC is capable of deleting those (first party) cookies, if the category gets disabled again.
-* To make this work, make sure you configure the name of the cookies to be delete in an optional attribute "data-gdcc-delete-cookie". The attribute accepts one or more cookie names space or comma separated:
+* To make this work, make sure you configure the name of the cookies to be deleted in an optional attribute "data-gdcc-delete-cookie". The attribute accepts one or more cookie names, separated by space or comma:
 
         <input type="checkbox" id="extfonts" data-gdcc-delete-cookie="cookieNo1, cookieNo2"/>
 
