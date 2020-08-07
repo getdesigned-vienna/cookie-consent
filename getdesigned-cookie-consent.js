@@ -39,14 +39,17 @@ function GdCookieConsent(debug = false) {
         $optInEls.removeClass('gdcc-hide');
         var that = this;
         if (!status) {
-            $optInEls.off('click.askExplicitPermission').on('click.askExplicitPermission', function () {
-                var msg = that.getCookieMsg(id);
-                if (confirm(msg)) {
-                    that.$gdcc.find('#' + id).prop("checked", 1);
-                    that.saveUserSettings(that);
-                    that.updateContent();
-                }
-            });
+            var msg = that.getCookieMsg(id);
+            if (msg) {
+                $optInEls.addClass('gdcc-has-msg');
+                $optInEls.off('click.askExplicitPermission').on('click.askExplicitPermission', function () {
+                    if (confirm(msg)) {
+                        that.$gdcc.find('#' + id).prop("checked", 1);
+                        that.saveUserSettings(that);
+                        that.updateContent();
+                    }
+                });
+            }
         }
 
         this.info((!status ? 'Showing' : 'Hiding') + 'DOM elements with selectors "' + optOut + '"');
@@ -57,10 +60,15 @@ function GdCookieConsent(debug = false) {
     this.getCookieMsg = function (id) {
         $input = this.$gdcc.find('#' + id);
         $label = this.$gdcc.find('label[for=' + id + ']');
-        return (this.getAttribute($label, 'data-gdcc-msg')
+        var msg = (this.getAttribute($label, 'data-gdcc-msg')
             ?? this.getAttribute($input, 'data-gdcc-msg')
             ?? this.getAttribute(this.$gdcc, 'data-gdcc-msg'))
-            .replace('@cookie@', $label.html());
+            ?? false;
+        if (msg) {
+            return msg.replace('@cookie@', $label.html());
+        } else {
+            return false;
+        }
     }
 
     this.modifyHeaderLinks = function (id, status) {
@@ -270,11 +278,11 @@ function GdCookieConsent(debug = false) {
             this.error('Sample: <div id="gd-cookie-consent">');
             return false;
         }
-        if (this.getAttribute(this.$gdcc, 'data-gdcc-msg') === typeof undefined) {
-            this.error('GdCookieConsent Wrapper does not have attribute "data-gdcc-msg". This is used to i18n the hint to enable a certain cookie. Please add.');
-            this.error('Sample: <div id="gd-cookie-consent" data-gdcc-msg="You need to activate the cookie category @cookie@. Continue?">' + ' (@cookie@ will be replaced with the label of the cookie).');
-            this.error('Note: More specific messages can configured on the input / label itself with the same attribute');
-            return false;
+        if (!this.getAttribute(this.$gdcc, 'data-gdcc-msg')) {
+            this.warn('GdCookieConsent Wrapper does not have attribute "data-gdcc-msg". This is used to i18n the hint to enable a certain cookie.');
+            this.warn('Sample: <div id="gdcc-wrapper" data-gdcc-msg="You need to activate the cookie category @cookie@. Continue?">' + ' (@cookie@ will be replaced with the label of the cookie).');
+            this.warn('Note: More specific messages can configured on the input / label itself with the same attribute');
+            this.warn('If the attribute is neither available on the wrapper, nor on input / label, onclick enabling on optout elements is disabled.');
         }
 
         return true;

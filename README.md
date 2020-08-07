@@ -88,8 +88,9 @@ Getdesigned Cookie Consent (GDCC)
 * The "type" attribute normally set to "text/css" and "type=text/javascript" should be set to "text/plain" instead. GDCC will take care.
 
 ## Missing cookie permissions / i18n
-* When the user clicks on an optout element (e.g. a note that YouTube is currently disabled), a confirmation appears asking the user, if she/he wants to proceed and enable the corresponding cookie category.
-* The message shown is taken from an attribute data-gdcc-msg, which MUST be set on the GDCC wrapper:
+* When the user clicks on an optout element (e.g. a note that YouTube is currently disabled), it is possible to ask the user, if she/he wants to proceed and enable the corresponding cookie category.
+* In order for this to work, a message shown to the user needs to be configured (optional).
+* The message shown is taken from an attribute data-gdcc-msg, which can be set on the GDCC wrapper or an input/label:
 
         <div id="gdcc-wrapper" data-gdcc-msg='You must accept cookies in the category "@cookie@" to show this content. Proceed?'>
 * The string "@cookie@" will automatically be replaced by the label of the cookies checkbox.
@@ -98,6 +99,7 @@ Getdesigned Cookie Consent (GDCC)
         
         <input type="checkbox" id="image" data-gdcc-msg='Enable cookie category "@cookie@"?' />
         <label for="image" data-gdcc-msg='Enable cookie category "@cookie@"?'>Images</label>
+* It is possible to set the message on the wrapper only, on an input/label only or both.
 
 ## Keep your cookies clean
 * If a cookie is activated even only for a short time, it will stay in memory of your browser
