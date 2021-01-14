@@ -86,6 +86,12 @@ Getdesigned Cookie Consent (GDCC)
         <link data-gdcc-href="https://external-css.com/alternate.css" class="gdcc-optin-extfonts" rel="stylesheet" type="text/css" />
         <script data-gdcc-src="googleanalytics.js" data-gdcc-selector="gdcc-optin-googleanalytics" type="text/javascript"></script>
 * The "type" attribute normally set to "text/css" and "type=text/javascript" should be set to "text/plain" instead. GDCC will take care.
+* Additionally, you can use inline scripts. Therefore, use the "data-gdcc-inline" attribute
+
+        <script data-gdcc-inline data-gdcc-selector="gdcc-optin-googleanalytics" type="text/plain">
+            // Insert your code here
+        </script>
+
 
 ## Missing cookie permissions / i18n
 * When the user clicks on an optout element (e.g. a note that YouTube is currently disabled), it is possible to ask the user, if she/he wants to proceed and enable the corresponding cookie category.

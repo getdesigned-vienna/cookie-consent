@@ -107,8 +107,24 @@ function GdCookieConsent(debug = false) {
     }
 
     this.modifySrcAndScriptType = function (id, status) {
-        var optIn = '.gdcc-optin[data-gdcc-cookie="' + id + '"][data-gdcc-src], .gdcc-optin-' + id + '[data-gdcc-src], [data-gdcc-selector="gdcc-optin-' + id + '"][data-gdcc-src]';
-        var optOut = '.gdcc-optout[data-gdcc-cookie="' + id + '"][data-gdcc-src], .gdcc-optout-' + id + '[data-gdcc-src], [data-gdcc-selector="gdcc-optout-' + id + '"][data-gdcc-src]';
+        var optIn = '' +
+            '.gdcc-optin[data-gdcc-cookie="' + id + '"][data-gdcc-src], ' +
+            '.gdcc-optin[data-gdcc-cookie="' + id + '"][data-gdcc-inline], ' +
+            '.gdcc-optin-' + id + '[data-gdcc-src], ' +
+            '.gdcc-optin-' + id + '[data-gdcc-inline], ' +
+            '[data-gdcc-selector="gdcc-optin-' + id + '"][data-gdcc-src], ' +
+            '[data-gdcc-selector="gdcc-optin-' + id + '"][data-gdcc-inline]'
+        ;
+
+        var optOut = '' +
+            '.gdcc-optout[data-gdcc-cookie="' + id + '"][data-gdcc-src], ' +
+            '.gdcc-optout[data-gdcc-cookie="' + id + '"][data-gdcc-inline], ' +
+            '.gdcc-optout-' + id + '[data-gdcc-src], ' +
+            '.gdcc-optout-' + id + '[data-gdcc-inline], ' +
+            '[data-gdcc-selector="gdcc-optout-' + id + '"][data-gdcc-src],' +
+            '[data-gdcc-selector="gdcc-optout-' + id + '"][data-gdcc-inline]'
+        ;
+
         var that = this;
 
         this.info((status ? 'Copy attribute "data-gdcc-src" => "src"' : 'Removing attribute "src"') + ' for DOM elements with selectors "' + optIn + '"');
@@ -125,8 +141,15 @@ function GdCookieConsent(debug = false) {
             if (tagName === 'script' && $this.attr('type').toString().toLowerCase() === "text/plain") {
                 that.info('Changing script type from text/plain to text/javascript to activate javascript');
                 $this.attr('type', 'text/javascript');
+
+                if (typeof $this.attr('data-gdcc-inline') !== typeof undefined && $this.attr('data-gdcc-inline') !== false) {
+                    $('head').append($this[0].outerHTML);
+                    $this.remove();
+                }
             }
-            $this.attr('src', $this.attr('data-gdcc-src'));
+            if (typeof $this.attr('data-gdcc-src') !== typeof undefined && $this.attr('data-gdcc-src') !== false) {
+                $this.attr('src', $this.attr('data-gdcc-src'));
+            }
         });
 
         this.info((!status ? 'Copy attribute "data-gdcc-src" => "src"' : 'Removing attribute "src"') + ' for DOM elements with selectors "' + optOut + '"');
@@ -138,7 +161,10 @@ function GdCookieConsent(debug = false) {
                 that.info('Changing script type back from text/javascript to text/plain disable javascript');
                 $this.attr('type', 'text/plain');
             }
-            $this.removeAttr('src');
+
+            if (typeof $this.attr('src') !== typeof undefined && $this.attr('src') !== false) {
+                $this.removeAttr('src');
+            }
         });
     }
 
