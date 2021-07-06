@@ -1,5 +1,6 @@
-function GdCookieConsent(debug = false) {
+function GdCookieConsent(debug = false, expiration = 365) {
     this.debugMode = debug;
+    this.expiration = expiration;
     this.$gdcc = null; // will point to gdcc wrapper soon
     this.config = []
     this.jQueryEventsSet = false;
@@ -240,7 +241,7 @@ function GdCookieConsent(debug = false) {
         }
         this.deriveConfig();
         var json = JSON.stringify(context.config);
-        cookie('gdcc-cookie-consent-settings', json);
+        cookie('gdcc-cookie-consent-settings', json, this.expiration);
         this.log(JSON.parse(json));
     }
 
